@@ -1,3 +1,3 @@
-<% node['hubot']['config'].each do |name, value| %>
-  <%= "#{name}=#{value} %>
-<% end %>
+<% node['hubot']['config'].each do |name, value| -%>
+export <%= "#{name.upcase}=#{value} %>
+<% end -%>
