@@ -94,6 +94,8 @@ end
 template "/opt/hubot/.env" do
   source "hubot-env-vars.erb"
   mode 0640
+  user node['hubot']['user']
+  group node['hubot']['group']
   notifies :restart, "service[hubot]", :delayed
 end
 
