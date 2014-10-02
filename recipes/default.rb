@@ -18,7 +18,6 @@
 #
 
 include_recipe "git"
-include_recipe "runit"
 
 case node['platform_family']
 when "debian"
@@ -45,7 +44,6 @@ directory node['hubot']['install_dir'] do
   mode  0755
 end
 
-# https://github.com/github/hubot/archive/v2.4.6.zip
 checkout_location = ::File.join(Chef::Config[:file_cache_path], "hubot")
 git checkout_location do
   repository "https://github.com/github/hubot.git"
@@ -98,7 +96,17 @@ execute "npm install" do
   notifies :restart, "service[hubot]", :delayed
 end
 
-runit_service "hubot" do
-  options node['hubot'].to_hash
-  env node['hubot']['config']
+template "/opt/hubot/.env" do
+  source "hubot-env-vars.erb"
+  mode 0640
+  notifies :restart, "service[hubot]", :delayed
 end
+
+template "/etc/init.d/hubot" do
+  source "hubot-init.erb"
+  mode 0755
+end
+
+service "hubot" do
+  action [:enable, :start]
+end 
