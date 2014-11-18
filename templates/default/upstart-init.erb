@@ -1,0 +1,23 @@
+description "Hubot, a chatops bot"
+
+start on started networking and runlevel [2345]
+stop on runlevel [016]
+
+setuid <%= node['hubot']['user'] %>
+chdir <%= node['hubot']['install_dir'] %>
+console log
+
+<% node['hubot']['config'].each do |name, value| -%>
+env <%= name.upcase %>="<%= value %>"
+<% end -%>
+
+
+script
+  echo $$ > /var/run/hubot/<%= node['hubot']['name'] %>.pid
+  /opt/hubot/bin/hubot --name <%= node['hubot']['name'] %> --adapter <%= node['hubot']['adapter'] %> >> /var/log/hubot/<%= node['hubot']['name'] %>.log 2>&1
+end script
+
+post-stop script
+  rm -f /var/run/hubot/<%= node['hubot']['name'] %>.pid
+end script
+

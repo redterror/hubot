@@ -97,19 +97,23 @@ execute "npm install" do
   notifies :restart, "service[hubot]", :delayed
 end
 
-template "/opt/hubot/.env" do
-  source "hubot-env-vars.erb"
-  mode 0640
-  user node['hubot']['user']
+directory "/var/run/hubot" do
+  owner node['hubot']['user']
   group node['hubot']['group']
+end
+
+directory "/var/log/hubot" do
+  owner node['hubot']['user']
+  group node['hubot']['group']
+end
+
+template "/etc/init/hubot.conf" do
+  source "upstart-init.erb"
+  mode 0755
   notifies :restart, "service[hubot]", :delayed
 end
 
-template "/etc/init.d/hubot" do
-  source "hubot-init.erb"
-  mode 0755
-end
-
 service "hubot" do
+  provider Chef::Provider::Service::Upstart
   action [:enable, :start]
 end 
