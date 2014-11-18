@@ -18,9 +18,6 @@
 #
 
 include_recipe "git"
-
-node.set['nodejs']['install_method'] = "source"
-
 include_recipe "nodejs"
 
 user node['hubot']['user'] do
