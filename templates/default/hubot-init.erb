@@ -6,7 +6,7 @@
 
 DAEMON="/opt/hubot/bin/hubot"
 DAEMON_ENV="source /opt/hubot/.env"
-DAEMON_OPTS="--name <%= node['hubot']['name'] %> --adapter hipchat"
+DAEMON_OPTS="--name <%= node['hubot']['name'] %> --adapter <%= node['hubot']['adapter'] %>"
 
 NAME=hubot
 USER=hubot
