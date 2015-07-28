@@ -7,6 +7,7 @@ setuid <%= node['hubot']['user'] %>
 chdir <%= node['hubot']['install_dir'] %>
 console log
 
+env PATH="/opt/hubot/node_modules/.bin:/opt/hubot/node_modules/hubot/node_modules/.bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 <% node['hubot']['config'].each do |name, value| -%>
 env <%= name.upcase %>="<%= value %>"
 <% end -%>
